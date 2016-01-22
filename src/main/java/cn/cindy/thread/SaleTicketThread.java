@@ -1,5 +1,7 @@
 package cn.cindy.thread;
+
 public class SaleTicketThread {
+	
 	public static void main(String[] args) {
 		//这只是一个线程，不是多线程
 		/*Thread thread = new TestThread();
@@ -53,7 +55,8 @@ class SimulationTicketRunnable implements Runnable{
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-						System.out.println(Thread.currentThread().getName()+":"+tickets--);
+//						synchronized(this){}//讲50行的参数改为str,与下面的72行的构成了死锁
+						System.out.println("run() " + Thread.currentThread().getName()+":"+tickets--);
 					}
 				} 
 			}
@@ -66,8 +69,8 @@ class SimulationTicketRunnable implements Runnable{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.print("sale():");
-			System.out.println(Thread.currentThread().getName()+":"+tickets--);
+//			synchronized(str){}
+			System.out.println("sale() "+Thread.currentThread().getName()+":"+tickets--);
 		}
 	}
 }
