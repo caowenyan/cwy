@@ -1,7 +1,8 @@
 package cn.cindy.thread;
 
 /**
- * 子线程循环10次，接着主线程循环100次，接着又回到了子线程循环10次，接着又回到主线程循环100次，如此循环50次。 
+ * 子线程循环10次，接着主线程循环100次，接着又回到了子线程循环10次，接着又回到主线程循环100次，如此循环50次.
+ * 注意（永远在循环（loop）里调用 wait 和 notify，不是在 If 语句）
  */
 public class TraditionalThreadCommunication {
 	static boolean sub = true;
@@ -73,7 +74,9 @@ class Business{
 	boolean sub = true;
 	
 	public synchronized void sub(int i){
-		if(!sub){
+		//一个线程可以同时醒来，没有被通知，中断，超时，那么calledspurious唤醒。
+		//虽然这将很少发生在实践中，应用程序必须防止它通过测试的情况下，应该已经导致线程被唤醒，并继续等待
+		while(!sub){
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
@@ -88,7 +91,7 @@ class Business{
 	}
 	
 	public synchronized void main(int i){
-		if(sub){
+		while(sub){
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
