@@ -1,1 +1,3 @@
 如何在线程死亡时通知系统做一些回调函数？或是注册监听器之类的操作？
+ThreadLocal用在很多开源框架的操作多线程获取实例上，例如structs，hibernate等
+AtomicInteger？
