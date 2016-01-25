@@ -1,4 +1,4 @@
-package cn.cindy.netty.bio;
+package cn.cindy.netty.fakenio;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class TimeServerHandler implements Runnable{
 				if(body==null){
 					break;
 				}
-				System.out.println(Thread.currentThread().getName()+" -- the time server receive data : "+body);
+				System.out.println(Thread.currentThread().getName()+" the time server receive data : "+body);
 				currentTime = "QUERY TIME".equalsIgnoreCase(body)? new Date(System.currentTimeMillis()).toString():"BAD ORDER";
 				out.println(currentTime);
 			}
