@@ -76,7 +76,8 @@ public class ThreadPoolTest {
 		for(int i=0;i<10;i++){
 			final int task = i;
 			if(task>5)
-				//使用延迟执行风格的方法 
+				//使用延迟执行风格的方法
+				//delay时间后按照period的速率运行:service.scheduleAtFixedRate(runnable,delay, period, unit)
 				service.schedule(new Runnable() {
 					@Override
 					public void run() {
