@@ -65,13 +65,13 @@ public class TimeClientHandle implements Runnable{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			//多路复用器关闭之后,所有注册在上边的channel和pipe等资源都会去被自动去注册或是关闭,所以不需要重复释放资源
-			if(selector!=null){
-				try {
-					selector.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		}
+		//多路复用器关闭之后,所有注册在上边的channel和pipe等资源都会去被自动去注册或是关闭,所以不需要重复释放资源
+		if(selector!=null){
+			try {
+				selector.close();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -127,7 +127,7 @@ public class TimeClientHandle implements Runnable{
 		writerBuffer.flip();
 		socketChannel2.write(writerBuffer);
 		if(!writerBuffer.hasRemaining()){
-			System.out.println("send order 2 server success");
+			System.out.println("send order to server success");
 		}
 	}
 }

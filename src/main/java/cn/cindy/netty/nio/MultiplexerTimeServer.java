@@ -19,14 +19,12 @@ public class MultiplexerTimeServer implements Runnable{
 	/**
 	 * 初始化多路复用器,绑定监听端口
 	 */
-	public MultiplexerTimeServer(int... port) {
+	public MultiplexerTimeServer(int port) {
 		try {
 			selector = Selector.open();
 			serverSocketChannel = ServerSocketChannel.open();
 			serverSocketChannel.configureBlocking(false);
-			for (int i = 0; i < port.length; i++) {
-				serverSocketChannel.socket().bind(new InetSocketAddress(port[i]),1024);//1024:请求队列的最大长度
-			}
+			serverSocketChannel.socket().bind(new InetSocketAddress(port),1024);//1024:请求队列的最大长度
 			serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 			System.out.println("the time server is start in port : "+port);
 		} catch (IOException e) {
@@ -42,7 +40,9 @@ public class MultiplexerTimeServer implements Runnable{
 	public void run() {
 		while(!stop){
 			try {
-				selector.select(1000);//设置超时时间
+				//设置休眠时间,无论是否有读写事件发生,selector每隔1s被唤醒一次
+				//selector也提供了一个无参的select方法
+				selector.select(1000);
 				Set<SelectionKey> set = selector.selectedKeys();
 				Iterator<SelectionKey>iterable = set.iterator();
 				SelectionKey key = null;
@@ -62,13 +62,13 @@ public class MultiplexerTimeServer implements Runnable{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			//多路复用器关闭之后,所有注册在上边的channel和pipe等资源都会去被自动去注册或是关闭,所以不需要重复释放资源
-			if(selector!=null){
-				try {
-					selector.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		}
+		//多路复用器关闭之后,所有注册在上边的channel和pipe等资源都会去被自动去注册或是关闭,所以不需要重复释放资源
+		if(selector!=null){
+			try {
+				selector.close();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -110,7 +110,7 @@ public class MultiplexerTimeServer implements Runnable{
 		if(currentTime!=null){
 			byte[]bytes = currentTime.getBytes();
 			ByteBuffer writeBuffer = ByteBuffer.allocate(bytes.length);
-			writeBuffer.put(writeBuffer);
+			writeBuffer.put(bytes);
 			writeBuffer.flip();
 			sc.write(writeBuffer);
 		}
