@@ -8,6 +8,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Semaphore也是一个线程同步的辅助类，可以维护当前访问自身的线程个数，并提供了同步机制。
  * 使用Semaphore可以控制同时访问资源的线程个数，例如，实现一个文件允许的并发访问数。
+ * 单个信号量的Semaphore对象可以实现互斥锁的功能，并且可以是由一个线程获得了“锁”，再由另一个线程释放“锁”，这可应用于死锁恢复的一些场合。
  */
 public class SemaphoreTest {
 
