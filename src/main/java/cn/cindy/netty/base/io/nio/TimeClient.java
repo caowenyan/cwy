@@ -1,4 +1,4 @@
-package cn.cindy.netty.nio;
+package cn.cindy.netty.base.io.nio;
 
 public class TimeClient {
 

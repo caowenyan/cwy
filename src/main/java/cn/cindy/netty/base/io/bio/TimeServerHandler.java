@@ -1,4 +1,4 @@
-package cn.cindy.netty.bio;
+package cn.cindy.netty.base.io.bio;
 
 import java.io.BufferedReader;
 import java.io.IOException;

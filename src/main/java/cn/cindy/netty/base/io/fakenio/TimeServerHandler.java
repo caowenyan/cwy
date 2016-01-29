@@ -1,4 +1,4 @@
-package cn.cindy.netty.fakenio;
+package cn.cindy.netty.base.io.fakenio;
 
 import java.io.BufferedReader;
 import java.io.IOException;

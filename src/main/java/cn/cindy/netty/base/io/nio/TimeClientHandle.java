@@ -1,32 +1,31 @@
-package cn.cindy.netty.aio;
+package cn.cindy.netty.base.io.nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
-public class MultiplexerTimeServer implements Runnable{
+public class TimeClientHandle implements Runnable{
+	private String ip;
+	private Integer port;
 	private Selector selector;
-	private ServerSocketChannel serverSocketChannel;
+	private SocketChannel socketChannel;
 	private volatile boolean stop;
 	
 	/**
 	 * 初始化多路复用器,绑定监听端口
 	 */
-	public MultiplexerTimeServer(int port) {
+	public TimeClientHandle(String ip, int port) {
 		try {
+			this.ip = ip;
+			this.port = port;
 			selector = Selector.open();
-			serverSocketChannel = ServerSocketChannel.open();
-			serverSocketChannel.configureBlocking(false);
-			serverSocketChannel.socket().bind(new InetSocketAddress(port),1024);//1024:请求队列的最大长度
-			serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-			System.out.println("the time server is start in port : "+port);
+			socketChannel = SocketChannel.open();
+			socketChannel.configureBlocking(false);
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -38,11 +37,15 @@ public class MultiplexerTimeServer implements Runnable{
 	}
 	
 	public void run() {
+		try {
+			doConnection();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 		while(!stop){
 			try {
-				//设置休眠时间,无论是否有读写事件发生,selector每隔1s被唤醒一次
-				//selector也提供了一个无参的select方法
-				selector.select(1000);
+				selector.select(1000);//设置超时时间
 				Set<SelectionKey> set = selector.selectedKeys();
 				Iterator<SelectionKey>iterable = set.iterator();
 				SelectionKey key = null;
@@ -73,18 +76,30 @@ public class MultiplexerTimeServer implements Runnable{
 		}
 	}
 
+	private void doConnection() throws Exception{
+		//如果直接连接成功,则注册到多路复用器上, 发送请求消息,读应答
+		if(socketChannel.connect(new InetSocketAddress(ip, port))){
+			socketChannel.register(selector, SelectionKey.OP_READ);
+			doWrite(socketChannel);
+		}else{
+			socketChannel.register(selector, SelectionKey.OP_CONNECT);
+		}
+	}
+
 	private void handleInput(SelectionKey key) throws Exception{
 		if(key.isValid()){
-			//处理新接入的请求消息
-			if(key.isAcceptable()){
-				ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
-				SocketChannel sc = ssc.accept();
-				sc.configureBlocking(false);
-				sc.register(selector, SelectionKey.OP_READ);
+			//判断是否连接成功
+			SocketChannel sc = (SocketChannel) key.channel();
+			if(key.isConnectable()){
+				if(sc.finishConnect()){
+					sc.register(selector, SelectionKey.OP_READ);
+					doWrite(sc);
+				}else{
+					System.exit(1);//连接失败,进程退出
+				}
 			}
 			if(key.isReadable()){
 				//读数据
-				SocketChannel sc = (SocketChannel) key.channel();
 				ByteBuffer readBuffer = ByteBuffer.allocate(1024);
 				int readBytes = sc.read(readBuffer);
 				if(readBytes>0){
@@ -92,9 +107,8 @@ public class MultiplexerTimeServer implements Runnable{
 					byte[]bytes = new byte[readBuffer.remaining()];
 					readBuffer.get(bytes);
 					String body = new String(bytes,"UTF-8");
-					System.out.println("the time server receive order : "+body);
-					String currentTime = "QUERY TIME".equalsIgnoreCase(body)? new Date(System.currentTimeMillis()).toString():"BAD ORDER";
-					doWriter(sc,currentTime);
+					System.out.println("now is : "+body);
+					this.stop = true;
 				}else if(readBytes<0){
 					//对链路端关闭
 					key.cancel();
@@ -106,13 +120,14 @@ public class MultiplexerTimeServer implements Runnable{
 		}
 	}
 
-	private void doWriter(SocketChannel sc, String currentTime) throws Exception{
-		if(currentTime!=null){
-			byte[]bytes = currentTime.getBytes();
-			ByteBuffer writeBuffer = ByteBuffer.allocate(bytes.length);
-			writeBuffer.put(bytes);
-			writeBuffer.flip();
-			sc.write(writeBuffer);
+	private void doWrite(SocketChannel socketChannel2)  throws Exception{
+		byte[]req = "QUERY TIME".getBytes();
+		ByteBuffer writerBuffer = ByteBuffer.allocate(req.length);
+		writerBuffer.put(req);
+		writerBuffer.flip();
+		socketChannel2.write(writerBuffer);
+		if(!writerBuffer.hasRemaining()){
+			System.out.println("send order to server success");
 		}
 	}
 }

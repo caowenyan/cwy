@@ -1,4 +1,4 @@
-package cn.cindy.netty.bio;
+package cn.cindy.netty.base.io.fakenio;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,8 +16,8 @@ public class TimeClient {
 		Socket socket = null;
 		BufferedReader in = null;
 		PrintWriter out = null;
+		Scanner scanner = new Scanner(System.in);
 		try {
-			Scanner scanner = new Scanner(System.in);
 			socket = new Socket("localhost", port);
 			while(true){
 				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));

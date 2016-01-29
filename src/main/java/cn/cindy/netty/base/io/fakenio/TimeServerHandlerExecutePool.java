@@ -1,4 +1,4 @@
-package cn.cindy.netty.fakenio;
+package cn.cindy.netty.base.io.fakenio;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
