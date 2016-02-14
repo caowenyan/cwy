@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * 一个ThreadLocal代表一个变量，故其中只能放一个数据，你有两个变量都要线程范围内共享，则定义两个ThreadLocal变量
  * 若有多个变量需要线程共享，那就定义一个对象来封装这些变量，在ThreadLocal中放此对象即可。
- * 想比较CopyOfThreadLocalObject还是比较擦的，那个更优雅
+ * 想比较CopyOfThreadLocalObject还是比较糙的，那个更优雅
  */
 public class ThreadLocalObjectTest {
 	

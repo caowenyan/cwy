@@ -1,5 +1,7 @@
 package cn.cindy.thread;
 
+import com.sun.javafx.tk.Toolkit;
+
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -17,13 +19,13 @@ public class BlockingQueueCommunication {
 		service.execute(new Runnable() {
 			public void run() {
 				for (int i = 0; i < 50; i++) {
-					business.sub();
+					business.sub(i);
 				}
 			}
 		});
 
 		for (int i = 0; i < 50; i++) {
-			business.main();
+			business.main(i);
 		}
 	}
 
@@ -42,11 +44,11 @@ public class BlockingQueueCommunication {
 			}
 		}
 
-		public void sub() {
+		public void sub(int index) {
 			try {
 				mainQueue.take();
 				for (int i = 0; i < 10; i++) {
-					System.out.println(Thread.currentThread().getName() + " : " + i);
+					System.out.println(Thread.currentThread().getName() + " : " + i + ", loop of :" + index);
 				}
 				subQueue.put(1);
 			} catch (Exception e) {
@@ -54,11 +56,11 @@ public class BlockingQueueCommunication {
 			}
 		}
 
-		public void main() {
+		public void main(int index) {
 			try {
 				subQueue.take();
 				for (int i = 0; i < 5; i++) {
-					System.out.println(Thread.currentThread().getName() + " : " + i);
+					System.out.println(Thread.currentThread().getName() + " : " + i + ", loop of :" + index);
 				}
 				mainQueue.put(1);
 			} catch (Exception e) {

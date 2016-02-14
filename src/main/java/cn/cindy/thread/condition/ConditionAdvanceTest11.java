@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 线程1循环10次，接着线程2循环20次，接着线程3循环30次，如此循环50次.
- * 不同于1,他也是sub1~sub3交替运行,但是经常出现一下的情况:
+ * 不同于1,他也是sub1~sub3交替运行,<b>但是经常出现一下的情况</b>:
  * sub2 thread sequece of 19,loop of 0
  * sub3 thread sequece of 0,loop of 1
  * 注意（永远在循环（loop）里调用 wait 和 notify，不是在 If 语句）

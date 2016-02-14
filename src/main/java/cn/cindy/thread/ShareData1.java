@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
  *      有时会输出Null
  * 问题的原因：
  *         可能HashMap线程不安全导致的
- *        
+ * 但是一直为测试出来,也没想得到
  */
 public class ShareData1 {
 	// static int data = 0;

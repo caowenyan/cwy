@@ -7,9 +7,10 @@ import java.util.TimerTask;
 public class TraditionalTimer {
 	public static int count = 0;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 //		baseTimer();
-		timerLoop();
+		//timerLoop();
+		advanceTimer();
 	}
 	
 	/**
@@ -21,7 +22,7 @@ public class TraditionalTimer {
 			public void run() {
 				System.out.println("timer is running after 5 sec");
 			}
-		},5000);;
+		},5000);
 	}
 
 	/**
@@ -33,7 +34,7 @@ public class TraditionalTimer {
 			public void run() {
 				System.out.println("timer is running every 2s after 5 sec");
 			}
-		},5000,2000);;
+		},5000,2000);
 	}
 	
 	/**
