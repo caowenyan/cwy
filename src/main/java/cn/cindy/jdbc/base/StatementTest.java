@@ -2,6 +2,7 @@ package cn.cindy.jdbc.base;
 
 import cn.cindy.jdbc.BaseUtil;
 
+import javax.naming.BinaryRefAddr;
 import java.sql.*;
 
 /**
@@ -25,7 +26,7 @@ public class StatementTest {
             System.out.println("Creating statement...");
             stmt = conn.createStatement();
             String sql;
-            sql = "SELECT id, first, last, age FROM Employees";
+            sql = "SELECT id, first, last, age, bir FROM Employees";
             ResultSet rs = stmt.executeQuery(sql);
 
             //STEP 5: Extract data from result set
@@ -35,12 +36,14 @@ public class StatementTest {
                 int age = rs.getInt("age");
                 String first = rs.getString("first");
                 String last = rs.getString("last");
+                Date data = rs.getDate("bir");
 
                 //Display values
                 System.out.print("ID: " + id);
                 System.out.print(", Age: " + age);
                 System.out.print(", First: " + first);
-                System.out.println(", Last: " + last);
+                System.out.print(", Last: " + last);
+                System.out.println(", Bir: " + data);
             }
             //STEP 6: Clean-up environment
             rs.close();
