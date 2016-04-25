@@ -21,6 +21,7 @@ public class TimeServer {
 			System.out.println("the time server is start in the port in : "+port);
 			Socket socket = null;
 			//创建i/o任务线程池(为什么设置maximumPoolSize为3就死亡)
+			//这是由于创建线程池对象时照成的,maximumPoolSize < corePoolSize
 			TimeServerHandlerExecutePool singleExecute = new TimeServerHandlerExecutePool(4,10);
 			while(true){
 				socket = server.accept();
