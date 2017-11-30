@@ -1,9 +1,13 @@
 package cn.cindy.util;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
 /**
 *通过将bean配置到spring的容器中，可以获取bean
 */
-public class SpringContextHelper implements ApplicationContextAware{
+public class SpringContextHelper implements ApplicationContextAware {
 	
 	private static ApplicationContext context = null;
 	
