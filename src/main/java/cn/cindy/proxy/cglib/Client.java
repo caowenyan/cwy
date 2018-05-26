@@ -1,5 +1,7 @@
 package cn.cindy.proxy.cglib;
 
+import cn.cindy.proxy.BookServiceBean;
+
 /**
  * Created by Caowenyan on 2016/3/7.
  */

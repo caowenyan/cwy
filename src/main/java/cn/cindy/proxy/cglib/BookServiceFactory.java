@@ -1,5 +1,6 @@
 package cn.cindy.proxy.cglib;
 
+import cn.cindy.proxy.BookServiceBean;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
