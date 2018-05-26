@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
  * @description
  * <p>转化，功能累加thenApply(Function)，无阻塞</p>
  * <p>扁平化转化，串联，thenCompose(Function)，无阻塞</p>
- * <p>并联，thenCombine(CompletableFuture, BiFunction)</p>
+ * <p>并联，thenCombine(CompletionStage, BiFunction)</p>
  * <p>合并消费,和thenCombine类似，除了返回值，thenAcceptBoth(CompletionStage, BiConsumer)</p>
  * <p>合并消费,和thenAcceptBoth类似，只是不用两个future的返回值，runAfterBoth(CompletionStage, Runnable)</p>
  * <p>那个先执行完就返回那个，另一个执行非阻塞，applyToEither(CompletionStage, Function)</p>
